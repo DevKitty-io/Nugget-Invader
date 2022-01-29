@@ -75,8 +75,13 @@ void Attacks::deauthStatus() {
  attacksDeauthStatus.addSimpleMonitor(3); // temporary structure
  pixels.setPixelColor(0, pixels.Color(150,0, 0)); pixels.show();
  wifiScanner.setDeauthList();
-//  attacksDeauthStats.addDashboard(); // update with number of packets and shit being sent
-////  attacksDeauthStatus
-//  
- attacksDeauthStatus.updateDisplay();  
+
+ while (true) { // add break condition
+  wifiScanner.deauthClients();
+  //  attacksDeauthStats.addDashboard(); // update with number of packets and shit being sent
+  ////  attacksDeauthStatus
+  //  
+  attacksDeauthStatus.updateDisplayManual();  
+  delay(0);
+ }
 }

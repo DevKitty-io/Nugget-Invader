@@ -1,0 +1,37 @@
+Date : 2022-01-29 02:28:20
+Directory : /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader
+Total : 13 files,  1722 codes, 192 comments, 345 blanks, all 2259 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         13 |      1,722 |        192 |        345 |      2,259 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                             | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                |         13 |      1,722 |        192 |        345 |      2,259 |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                         | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/Attacks.cpp        | C++      |         54 |         14 |         20 |         88 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/Attacks.h          | C++      |         26 |          1 |         17 |         44 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/Buttons.cpp        | C++      |         46 |          9 |         12 |         67 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/Buttons.h          | C++      |         18 |          0 |          6 |         24 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/ESPPL.h            | C++      |        325 |         38 |         33 |        396 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/Graphics.h         | C++      |        653 |          3 |         11 |        667 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/MenuInterface.cpp  | C++      |        282 |         29 |         85 |        396 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/MenuInterface.h    | C++      |         59 |          5 |         30 |         94 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/Monitor.cpp        | C++      |          5 |          0 |          5 |         10 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/Monitor.h          | C++      |          8 |          0 |          4 |         12 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/Nugget-Invader.ino | C++      |         68 |          7 |         21 |         96 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/WiFiScanner.cpp    | C++      |        141 |         82 |         87 |        310 |
+| /home/alex/WiFi-Nugget/firmware/Nugget-Invader/Nugget-Invader/WiFiScanner.h      | C++      |         37 |          4 |         14 |         55 |
+| Total                                                                            |          |      1,722 |        192 |        345 |      2,259 |
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

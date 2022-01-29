@@ -44,6 +44,7 @@ class MenuInterface {
 
     void updateDisplay();
     void updateDisplay(bool override);
+    void updateDisplayManual();
 
     void addNav(void (*function1)(), void (*function2)());
     void addNav(void (*function1)());
