@@ -3,10 +3,17 @@
 #include "Arduino.h"
 #include "ESP8266WiFi.h"
 #include "SH1106Wire.h"
+#include <Adafruit_NeoPixel.h>
+
+// #include "Graphics.h"
 // #include "ESPPL.h"
 
+extern Adafruit_NeoPixel pixels;
 extern uint8_t scrollIndex;
 extern SH1106Wire display;
+
+// extern MenuInterface monitorPackets;
+// extern uint8_t* attack_bits;
 
 // extern uint8_t numScrollerValues;
 // extern String* scrollerTextValues;
@@ -27,6 +34,7 @@ class WiFiScanner {
     void getAPs(); // return list of just APs
 
     void setDeauthList();
+    void monMode();
     
   private:
 

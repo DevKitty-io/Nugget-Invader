@@ -1,8 +1,6 @@
 #include "Attacks.h"
 #include "ESP8266WiFi.h"
-#include <Adafruit_NeoPixel.h>
 
-Adafruit_NeoPixel pixels {1, D8, NEO_GRB + NEO_KHZ800 }; // initialize 1 NeoPixel on D8
 
 String testList[] = {"0F:3D:4C:FF:E4:3A","AB:CD:4C:00:FE:12", "0F:3D:4C:00:FC:22", "...","* SELECT: ALL *", "* START ATTACK *"};
 
@@ -37,6 +35,7 @@ void Attacks::selectAP() {
 
 // select Client(s) for deauthentication
 void Attacks::selectClients() {
+  pixels.clear(); pixels.show();
 rescan = false;
 attacksSelectClients.addFooter("Select Clients");
 attacksSelectClients.addNav(Attacks::selectAP, Attacks::deauthStatus); 
@@ -63,7 +62,7 @@ if (rescanClients) {
 //
 //// monitor for deauth attack
 void Attacks::deauthStatus() {
-    pixels.begin(); pixels.clear(); 
+    
  attacksDeauthStatus.addFooter("Attack Status");
  attacksDeauthStatus.addNav(Attacks::selectClients); // create single instance
 

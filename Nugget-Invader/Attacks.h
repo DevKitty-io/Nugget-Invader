@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include "MenuInterface.h"
 #include "WiFiScanner.h"
+#include <Adafruit_NeoPixel.h>
 
 // extern 
 extern WiFiScanner wifiScanner;
@@ -12,6 +13,8 @@ extern String clients[50];
 extern uint8_t numClients;
 extern bool rescan;
 extern bool rescanClients;
+
+extern Adafruit_NeoPixel pixels;
 
 extern uint8_t scrollIndex;
 extern String apList[50][5];

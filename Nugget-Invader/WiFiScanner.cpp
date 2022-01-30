@@ -1,6 +1,10 @@
 #include "WiFiScanner.h"
 #include "ESP8266WiFi.h"
 #include "ESPPL.h"
+#include "Graphics.h"
+#include "MenuInterface.h"
+
+extern MenuInterface monitorPackets;
 
 uint8_t numAPs;
 uint8_t numClients;
@@ -24,6 +28,8 @@ String tmpBSSID;
 uint8_t clientsToDeauth[300];
 uint8_t numToDeauth = 0;
 
+String pktType;
+
 WiFiScanner::WiFiScanner() {  
 
 }
@@ -36,12 +42,12 @@ WiFiScanner::WiFiScanner() {
 // //  Serial.print("\n");     
 // //  Serial.print("FT: ");  
 //  Serial.print((int) info->frametype); 
-//   ft = (int) info->frametype;
+  
 
   
 // //  Serial.print(" FST: ");  
 //  Serial.println((int) info->framesubtype); 
-//   fst = (int) info->framesubtype;
+  
   
 //  Serial.print(" SRC: ");
 //   for (int i = 0; i < 6; i++) {sprintf(srcOctet, "%02x", info->sourceaddr[i]); srcMac+=srcOctet; if (i!=5) srcMac+=":";}
@@ -63,7 +69,7 @@ WiFiScanner::WiFiScanner() {
   
 // //  Serial.print(" CHNL: ");
 // //  Serial.print(info->channel); 
-//   ch = (int) info->channel;
+  
   
 // //  if (info->ssid_length > 0) {
 // //    Serial.print(" SSID: ");
@@ -103,16 +109,21 @@ void cb(esppl_frame_info *info) {
   // Serial.print((int) info->frametype);
   // Serial.print(" FST: ");  
   // Serial.print((int) info->framesubtype);
+
+  ft = (int) info->frametype;
+  fst = (int) info->framesubtype;
   // Serial.print(" SRC: ");
   for (int i = 0; i < 6; i++) {sprintf(srcOctet, "%02x", info->sourceaddr[i]); srcMac+=srcOctet; if (i!=5) srcMac+=":";}
   // Serial.print(" DEST: ");
   for (int i = 0; i < 6; i++) {sprintf(dstOctet, "%02x", info->receiveraddr[i]); dstMac+=dstOctet;  if (i!=5) dstMac+=":";}
   // Serial.print(" RSSI: ");
+  rssi = info->rssi;
   // Serial.print(info->rssi);
   // Serial.print(" SEQ: ");
   // Serial.print(info->seq_num);
   // Serial.print(" CHNL: ");
   // Serial.print(info->channel);
+  ch = (int) info->channel;
   // if (info->ssid_length > 0) {
   //   Serial.print(" SSID: ");
   //   for (int i = 0; i < info->ssid_length; i++) Serial.print((char) info->ssid[i]);    
@@ -255,7 +266,7 @@ void WiFiScanner::setDeauthList() {
 
 }
 
-void WiFiScanner::deauthClients() {
+void WiFiScanner::deauthClients(){
 
   wifi_set_channel(WiFi.channel(scrollIndex));
 
@@ -304,5 +315,90 @@ void WiFiScanner::deauthClients() {
   // Serial.println(&clientsToDeauth[0]);
 
 
+
+}
+
+void WiFiScanner::monMode() {
+  esppl_init(cb);
+
+  esppl_sniffing_start();
+  wifi_promiscuous_enable(true);
+
+  uint8_t press = nuggButtons.getPress();
+  while (!nuggButtons.ltPressed()) {
+  press = nuggButtons.getPress();
+
+  for (int i=1; i<12; i++) {
+   esppl_set_channel(i);
+      while (esppl_process_frames()) {
+        //
+      }
+    srcMac.replace(":","");
+    srcMac.toUpperCase();
+
+
+
+    if (ch!=0) {
+      if      (ft == 0 and (fst == 0 or fst == 1)) pktType = "Assoc";
+      else if (ft == 0 and (fst == 2 or fst == 3)) pktType = "Re-Assoc";
+      else if (ft == 0 and fst == 4) pktType = "Probe Req";
+      else if (ft == 0 and fst == 8 ) pktType = "Beacon";
+      else if (ft == 0 and fst == 10) pktType = "Dissasoc";
+      else if (ft == 0 and fst == 11) pktType = "Auth";
+      else if (ft == 0 and fst == 12) pktType = "DEAUTH";
+      else if (ft == 0) pktType = "Mgmt";
+      else if (ft == 1) pktType = "Control";
+      else if (ft == 2) pktType = "Data";
+      else pktType = "Extension";
+
+
+
+      display.clear();
+
+      if (pktType.equals("DEAUTH") or pktType.equals("Dissasoc")) {
+        display.drawXbm(4,0,128,64,attack_bits);
+        pixels.setPixelColor(0, pixels.Color(150,0, 0));
+
+      }
+      else if (pktType.equals("Re-Assoc")) {
+        display.drawXbm(4,0,128,64,reload_bits);
+        pixels.setPixelColor(0, pixels.Color(0,0,150));
+      }
+      else if (pktType.equals("Control")) {
+        display.drawXbm(4,0,128,64,low_signal_bits);
+        pixels.setPixelColor(0, pixels.Color(0,0, 150));
+      }
+      else {
+        display.drawXbm(4,0,128,64,medium_signal_bits);
+        pixels.setPixelColor(0, pixels.Color(0,150, 0));
+      }
+      pixels.show();
+
+      display.drawXbm(Window_Header_x_hot, Window_Header_y_hot, Window_Header_width, Window_Header_height, Window_Header_bits);
+      display.drawXbm(Navbar_Outline_x_hot, Navbar_Outline_y_hot, Navbar_Outline_width, Navbar_Outline_height, Navbar_Outline_bits);
+      display.drawXbm(Arrow_Left_x_hot,Arrow_Left_y_hot,Arrow_Left_width,Arrow_Left_height,Arrow_Left_bits);
+      ::display.drawString(((104 - ::display.getStringWidth("PACKET MONITOR")) / 2) + 12, 54, "PACKET MONITOR");
+
+      display.drawString(3,0, srcMac);
+      display.drawString(94, 0, "CH:"+ (String) ch);
+
+      display.drawString(0,17,"FT: "+pktType);
+      display.drawString(0,27,"RSSI: "+ (String) rssi);
+
+      dstMac.replace(":","");
+      dstMac.toUpperCase();
+      display.drawString(0,37,dstMac);
+
+
+
+      
+      display.display();
+    }
+     delay(0);
+  }
+    // add break here
+  } 
+    pixels.clear(); pixels.show();
+   wifi_promiscuous_enable(false);  
 
 }
