@@ -390,7 +390,7 @@ void WiFiScanner::monMode() {
 
       
       display.display();
-    }
+    // }
      delay(0);
   }
     // add break here
