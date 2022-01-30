@@ -333,7 +333,7 @@ void WiFiScanner::monMode() {
 
 
 
-    if (ch!=0) {
+    // if (ch!=0) {
       if      (ft == 0 and (fst == 0 or fst == 1)) pktType = "Assoc";
       else if (ft == 0 and (fst == 2 or fst == 3)) pktType = "Re-Assoc";
       else if (ft == 0 and fst == 4) pktType = "Probe Req";
