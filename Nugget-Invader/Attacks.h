@@ -14,6 +14,8 @@ extern uint8_t numClients;
 extern bool rescan;
 extern bool rescanClients;
 
+extern uint8_t numToDeauth;
+
 extern Adafruit_NeoPixel pixels;
 
 extern uint8_t scrollIndex;

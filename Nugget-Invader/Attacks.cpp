@@ -44,7 +44,7 @@ attacksSelectClients.addNav(Attacks::selectAP, Attacks::deauthStatus);
 // ADD CLIENT ASSOCIATION TO WIFI MANAGER
 if (rescanClients) {
  wifiScanner.init();
- wifiScanner.scanClients(5); // contingent on current selected access point
+ wifiScanner.scanClients(15); // contingent on current selected access point
  Serial.println("finished client scan");
  rescanClients = false;
 }
@@ -71,9 +71,10 @@ void Attacks::deauthStatus() {
  String subSSID = apList[scrollIndex][1].length() > 15 ? apList[scrollIndex][1].substring(0,15) : apList[scrollIndex][1] ;
  attacksDeauthStatus.addHeader(subSSID,"CH:"+ padChannel);
 
- attacksDeauthStatus.addSimpleMonitor(3); // temporary structure
- pixels.setPixelColor(0, pixels.Color(150,0, 0)); pixels.show();
  wifiScanner.setDeauthList();
+ attacksDeauthStatus.addSimpleMonitor(numToDeauth); // temporary structure
+ pixels.setPixelColor(0, pixels.Color(150,0, 0)); pixels.show();
+
 
  while (true) { // add break condition
   wifiScanner.deauthClients();
