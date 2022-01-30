@@ -26,7 +26,7 @@ class MenuInterface {
     void addLoader(bool ready, uint8_t timeEstimate);
     
     /* Footer */
-    void addFooter(String* footerTextValues);
+    void addFooter(String* footerTextValues, unsigned char* scrollIconBits[]);
     void addFooter(String footerText);
 
     void updateFooterText(String footerText);
@@ -55,6 +55,8 @@ class MenuInterface {
     
     
   private:
+
+    unsigned char** scrollerIconBits;
 
     uint8_t monitorCount;
     bool monitorEn = false;

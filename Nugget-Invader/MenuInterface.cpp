@@ -107,8 +107,9 @@ void MenuInterface::updateScroller() {
 
 
 // add scrolling footer here
-void MenuInterface::addFooter(String* footerTextValues) {
+void MenuInterface::addFooter(String* footerTextValues, unsigned char* scrollerIconBits[]) {
   this->footerTextValues = footerTextValues;
+  this->scrollerIconBits = scrollerIconBits;
   footerEnabled = true; dynamicFooter = true;
 }
 
@@ -150,6 +151,8 @@ void MenuInterface::updateFooter() {
       ::display.drawLine(118, 54, 118, 63);
       ::display.drawLine(117, 54, 117, 63);
 
+
+      ::display.drawXbm(0,0,128,64,scrollerIconBits[scrollerPos]);
       ::display.drawXbm(Arrow_Right_x_hot,Arrow_Right_y_hot,Arrow_Right_width,Arrow_Right_height,Arrow_Right_bits);
 
       ::display.drawString(0, 54, footerText);

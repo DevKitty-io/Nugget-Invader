@@ -312,10 +312,6 @@ void WiFiScanner::deauthClients(){
     delay(50);
 
   }
-  // Serial.println(&clientsToDeauth[0]);
-
-
-
 }
 
 void WiFiScanner::monMode() {
@@ -333,8 +329,7 @@ void WiFiScanner::monMode() {
       while (esppl_process_frames()) {
         //
       }
-    srcMac.replace(":","");
-    srcMac.toUpperCase();
+    
 
 
 
@@ -364,7 +359,7 @@ void WiFiScanner::monMode() {
         display.drawXbm(4,0,128,64,reload_bits);
         pixels.setPixelColor(0, pixels.Color(0,0,150));
       }
-      else if (pktType.equals("Control")) {
+      else if (pktType.equals("Control") or pktType.equals("Beacon")) {
         display.drawXbm(4,0,128,64,low_signal_bits);
         pixels.setPixelColor(0, pixels.Color(0,0, 150));
       }
@@ -379,6 +374,8 @@ void WiFiScanner::monMode() {
       display.drawXbm(Arrow_Left_x_hot,Arrow_Left_y_hot,Arrow_Left_width,Arrow_Left_height,Arrow_Left_bits);
       ::display.drawString(((104 - ::display.getStringWidth("PACKET MONITOR")) / 2) + 12, 54, "PACKET MONITOR");
 
+      srcMac.replace(":","");
+      srcMac.toUpperCase();
       display.drawString(3,0, srcMac);
       display.drawString(94, 0, "CH:"+ (String) ch);
 

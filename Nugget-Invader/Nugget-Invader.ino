@@ -43,6 +43,12 @@ String invaderMenuDesc[] {
   "Nugget Invader"
 };
 
+unsigned char* invaderMenuIcons[] = {
+  invader_attack_bits,
+  invader_monitor_bits,
+  invader_about_bits
+};
+
 void invaderAttacks () {Attacks::init();}
 void invaderMonitor () {monitorTool.main();}
 void invaderAbout() {
@@ -98,7 +104,7 @@ void invaderToolMenu() {
   rescanClients = true;
   Serial.println("# entered invader tool menu");
   invaderMenu.addScroller(invaderMenuText, invaderTools, 3);
-  invaderMenu.addFooter(invaderMenuDesc);
+  invaderMenu.addFooter(invaderMenuDesc, invaderMenuIcons);
   invaderMenu.updateDisplay();
 }
 
