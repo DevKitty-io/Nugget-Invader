@@ -353,7 +353,7 @@ void WiFiScanner::monMode() {
       if (pktType.equals("DEAUTH") or pktType.equals("Dissasoc")) {
         display.drawXbm(4,0,128,64,attack_bits);
         pixels.setPixelColor(0, pixels.Color(150,0, 0));
-
+        delay(500);
       }
       else if (pktType.equals("Re-Assoc")) {
         display.drawXbm(4,0,128,64,reload_bits);

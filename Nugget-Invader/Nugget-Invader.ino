@@ -74,11 +74,12 @@ void (*invaderTools[])(void) = {
 };
 
 void setup() {
-  Serial.begin(115200); delay(300);
+  Serial.begin(115200); delay(3000);
   pixels.begin(); pixels.clear(); 
-  pixels.setBrightness(10);
+  pixels.setBrightness(100);
 
-  Serial.println("\nStarting Nugget Invader!");
+  Serial.println("\nNugget Invader v1.0");
+  Serial.println("by Alex Lynd");
   Serial.println("--------------------------");
 
   // add to menu interface init
@@ -102,7 +103,7 @@ void setup() {
 void invaderToolMenu() {
   rescan = true;
   rescanClients = true;
-  Serial.println("# entered invader tool menu");
+  // Serial.println("# entered invader tool menu");
   invaderMenu.addScroller(invaderMenuText, invaderTools, 3);
   invaderMenu.addFooter(invaderMenuDesc, invaderMenuIcons);
   invaderMenu.updateDisplay();

@@ -44,7 +44,7 @@ attacksSelectClients.addNav(Attacks::selectAP, Attacks::deauthStatus);
 // ADD CLIENT ASSOCIATION TO WIFI MANAGER
 if (rescanClients) {
  wifiScanner.init();
- wifiScanner.scanClients(15); // contingent on current selected access point
+ wifiScanner.scanClients(5); // contingent on current selected access point
  Serial.println("finished client scan");
  rescanClients = false;
 }
